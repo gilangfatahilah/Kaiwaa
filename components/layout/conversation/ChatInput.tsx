@@ -13,7 +13,7 @@ import { toast } from 'sonner'
 import { z } from 'zod'
 import TextareaAutoSize from 'react-textarea-autosize'
 import { Button } from '@/components/ui/button'
-import { SendHorizonal, SendHorizontal } from 'lucide-react'
+import { SendHorizontal } from 'lucide-react'
 
 const chatMessageSchema = z.object({
   content: z.string().min(1, {
