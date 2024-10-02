@@ -10,7 +10,7 @@ import React from 'react'
 type Props = React.PropsWithChildren<{}>
 
 const ConversationsLayout = ({ children }: Props) => {
-  const conversations = useQuery(api.conversation.get);
+  const conversations = useQuery(api.conversations.get);
 
   return (
     <>
@@ -37,7 +37,7 @@ const ConversationsLayout = ({ children }: Props) => {
                     )
                 })
               )
-            : (<Loader2 />)
+            : (<Loader2 className='w-8 h-8 animate-spin duration-500' />)
         }
         Conversations
       </ItemList>
