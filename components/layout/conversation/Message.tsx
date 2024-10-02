@@ -13,7 +13,6 @@ type Props = {
   type: string;
 }
 
-
 const Message = ({
   fromCurrentUser,
   senderImage,

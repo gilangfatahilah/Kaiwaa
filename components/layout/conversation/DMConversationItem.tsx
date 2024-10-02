@@ -1,3 +1,5 @@
+'use client'
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
 import { Id } from '@/convex/_generated/dataModel'
@@ -9,11 +11,14 @@ type Props = {
   id: Id<'conversations'>;
   imageUrl: string;
   username: string;
+  lastMessageContent?: string;
+  lastMessageSender?: string;
 }
 
 const DMConversationItem = ({
-  id, imageUrl, username
+  id, imageUrl, username, lastMessageContent, lastMessageSender
 }: Props) => {
+
   return (
     <Link href={`/conversations/${id}`} className='w-full'>
       <Card className='p-2 flex flex-row items-center gap-4 truncate'>
@@ -29,9 +34,23 @@ const DMConversationItem = ({
             <h4 className='truncate'>
               {username}
             </h4>
-            <p className='text-sm text-muted-foreground truncate'>
-              Start the conversation!
-            </p>
+            {lastMessageContent && lastMessageSender
+              ? (
+                <span className='text-sm text-muted-foreground flex truncate overflow-ellipsis'>
+                  <p className='font-semibold'>
+                    {lastMessageSender}
+                    {':'}&nbsp;
+                  </p>
+
+                  <p className='truncate overflow-ellipsis'>
+                    {lastMessageContent}
+                  </p>
+                </span>
+              )
+              : (<p className='text-sm text-muted-foreground truncate'>
+                Start the conversation!
+              </p>
+              )}
           </div>
         </div>
       </Card>

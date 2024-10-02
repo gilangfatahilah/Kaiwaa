@@ -3,6 +3,7 @@
 import ConversationBody from '@/components/layout/conversation/Body';
 import ChatInput from '@/components/layout/conversation/ChatInput';
 import ConversationContainer from '@/components/layout/conversation/ConversationContainer'
+import RemoveFriendDialog from '@/components/layout/conversation/dialogs/RemoveFriendDialog';
 import Header from '@/components/layout/conversation/Header';
 import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel'
@@ -20,6 +21,11 @@ const ConversationPage = ({ params: { conversationId } }: Props) => {
   const conversation = useQuery(api.conversation.get, { id: conversationId })
   const isGroup = conversation?.isGroup;
 
+  const [removeFriendDialogOpen, setRemoveFriendDialogOpen] = React.useState<boolean>(false);
+  const [deleteGroupDialogOpen, setDeleteGroupDialogOpen] = React.useState<boolean>(false);
+  const [leaveGroupDialogOpen, setLeaveGroupDialogOpen] = React.useState<boolean>(false);
+  const [callType, setCallType] = React.useState<'audio' | 'video' | null>(null);
+
   return (
     conversation === undefined
       ? (
@@ -35,6 +41,12 @@ const ConversationPage = ({ params: { conversationId } }: Props) => {
         )
         : (
           <ConversationContainer>
+            <RemoveFriendDialog
+              conversationId={conversationId}
+              open={removeFriendDialogOpen}
+              setOpen={setRemoveFriendDialogOpen}
+            />
+
             <Header
               name={
                 (isGroup
@@ -44,6 +56,27 @@ const ConversationPage = ({ params: { conversationId } }: Props) => {
               }
               imageUrl={
                 isGroup ? undefined : conversation.otherMember.imageUrl
+              }
+              options={conversation.isGroup
+                ? [
+                  {
+                    label: 'Leave group',
+                    destructive: false,
+                    onClick: () => setLeaveGroupDialogOpen(true)
+                  },
+                  {
+                    label: 'Delete group',
+                    destructive: true,
+                    onClick: () => setDeleteGroupDialogOpen(true)
+                  },
+                ]
+                : [
+                  {
+                    label: 'Remove friend',
+                    destructive: true,
+                    onClick: () => setRemoveFriendDialogOpen(true)
+                  },
+                ]
               }
             />
 
