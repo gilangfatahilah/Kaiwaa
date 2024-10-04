@@ -32,7 +32,7 @@ const ConversationBody = ({ members }: Props) => {
         messageId: messages[0].message._id
       })
     }
-  }, [messages?.length, conversationId, markRead]);
+  }, [messages, messages?.length, conversationId, markRead]);
 
   const formatSeenBy = (names: string[]): React.ReactNode => {
     switch (names.length) {
