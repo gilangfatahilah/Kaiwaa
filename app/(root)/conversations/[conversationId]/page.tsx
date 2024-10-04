@@ -3,7 +3,9 @@
 import ConversationBody from '@/components/layout/conversation/Body';
 import ChatInput from '@/components/layout/conversation/ChatInput';
 import ConversationContainer from '@/components/layout/conversation/ConversationContainer'
+import LeaveGroupDialog from '@/components/layout/conversation/dialogs/LeaveGroupDialog';
 import RemoveFriendDialog from '@/components/layout/conversation/dialogs/RemoveFriendDialog';
+import RemoveGroupDialog from '@/components/layout/conversation/dialogs/RemoveGroupDialog';
 import Header from '@/components/layout/conversation/Header';
 import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel'
@@ -22,7 +24,7 @@ const ConversationPage = ({ params: { conversationId } }: Props) => {
   const isGroup = conversation?.isGroup;
 
   const [removeFriendDialogOpen, setRemoveFriendDialogOpen] = React.useState<boolean>(false);
-  const [deleteGroupDialogOpen, setDeleteGroupDialogOpen] = React.useState<boolean>(false);
+  const [removeGroupDialogOpen, setRemoveGroupDialogOpen] = React.useState<boolean>(false);
   const [leaveGroupDialogOpen, setLeaveGroupDialogOpen] = React.useState<boolean>(false);
   const [callType, setCallType] = React.useState<'audio' | 'video' | null>(null);
 
@@ -47,15 +49,27 @@ const ConversationPage = ({ params: { conversationId } }: Props) => {
               setOpen={setRemoveFriendDialogOpen}
             />
 
+            <RemoveGroupDialog
+              conversationId={conversationId}
+              open={removeGroupDialogOpen}
+              setOpen={setRemoveGroupDialogOpen}
+            />
+
+            <LeaveGroupDialog
+              conversationId={conversationId}
+              open={leaveGroupDialogOpen}
+              setOpen={setLeaveGroupDialogOpen}
+            />
+
             <Header
               name={
                 (isGroup
                   ? conversation.name
-                  : conversation.otherMember.username)
+                  : conversation.otherMember?.username)
                 || ""
               }
               imageUrl={
-                isGroup ? undefined : conversation.otherMember.imageUrl
+                isGroup ? undefined : conversation.otherMember?.imageUrl
               }
               options={conversation.isGroup
                 ? [
@@ -65,9 +79,9 @@ const ConversationPage = ({ params: { conversationId } }: Props) => {
                     onClick: () => setLeaveGroupDialogOpen(true)
                   },
                   {
-                    label: 'Delete group',
+                    label: 'Remove group',
                     destructive: true,
-                    onClick: () => setDeleteGroupDialogOpen(true)
+                    onClick: () => setRemoveGroupDialogOpen(true)
                   },
                 ]
                 : [

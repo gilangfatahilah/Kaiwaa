@@ -1,6 +1,8 @@
 'use client'
 
+import CreateGroupDialog from '@/components/layout/conversation/dialogs/CreateGroupDialog'
 import DMConversationItem from '@/components/layout/conversation/DMConversationItem'
+import GroupConversationItem from '@/components/layout/conversation/GroupConversationItem'
 import ItemList from '@/components/layout/item-list/ItemList'
 import { api } from '@/convex/_generated/api'
 import { useQuery } from 'convex/react'
@@ -14,7 +16,7 @@ const ConversationsLayout = ({ children }: Props) => {
 
   return (
     <>
-      <ItemList title='Conversations'>
+      <ItemList title='Conversations' action={<CreateGroupDialog />}>
         {
           conversations
             ? !conversations.length
@@ -26,7 +28,15 @@ const ConversationsLayout = ({ children }: Props) => {
               : (
                 conversations.map((conversation) => {
                   return conversation.conversation.isGroup
-                    ? null
+                    ? (
+                      <GroupConversationItem
+                        key={conversation.conversation._id}
+                        id={conversation.conversation._id}
+                        name={conversation.conversation.name ?? "-"}
+                        lastMessageContent={conversation.lastMessage?.content}
+                        lastMessageSender={conversation.lastMessage?.sender}
+                      />
+                    )
                     : (
                       <DMConversationItem
                         key={conversation.conversation._id}
