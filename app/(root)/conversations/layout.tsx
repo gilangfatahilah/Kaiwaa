@@ -35,6 +35,7 @@ const ConversationsLayout = ({ children }: Props) => {
                         name={conversation.conversation.name ?? "-"}
                         lastMessageContent={conversation.lastMessage?.content}
                         lastMessageSender={conversation.lastMessage?.sender}
+                        unseenCount={conversation.unseenCount}
                       />
                     )
                     : (
@@ -45,13 +46,13 @@ const ConversationsLayout = ({ children }: Props) => {
                         imageUrl={conversation.otherMember?.imageUrl ?? ""}
                         lastMessageContent={conversation.lastMessage?.content}
                         lastMessageSender={conversation.lastMessage?.sender}
+                        unseenCount={conversation.unseenCount}
                       />
                     )
                 })
               )
             : (<Loader2 className='w-8 h-8 animate-spin duration-500' />)
         }
-        Conversations
       </ItemList>
       {children}
     </>

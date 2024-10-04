@@ -1,8 +1,10 @@
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Id } from '@/convex/_generated/dataModel'
+import { checkNullWords } from '@/lib/utils';
 import { User } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react'
@@ -11,17 +13,18 @@ type Props = {
   id: Id<'conversations'>;
   imageUrl: string;
   username: string;
+  unseenCount: number;
   lastMessageContent?: string;
   lastMessageSender?: string;
 }
 
 const DMConversationItem = ({
-  id, imageUrl, username, lastMessageContent, lastMessageSender
+  id, imageUrl, username, unseenCount, lastMessageContent, lastMessageSender
 }: Props) => {
 
   return (
     <Link href={`/conversations/${id}`} className='w-full'>
-      <Card className='p-2 flex flex-row items-center gap-4 truncate'>
+      <Card className='p-2 flex flex-row items-center justify-between'>
         <div className='flex flex-row items-center gap-4 truncate'>
           <Avatar>
             <AvatarImage src={imageUrl} />
@@ -32,7 +35,7 @@ const DMConversationItem = ({
 
           <div className='flex flex-col truncate'>
             <h4 className='truncate'>
-              {username}
+              {checkNullWords(username)}
             </h4>
             {lastMessageContent && lastMessageSender
               ? (
@@ -53,6 +56,8 @@ const DMConversationItem = ({
               )}
           </div>
         </div>
+
+        {unseenCount ? (<Badge>{unseenCount}</Badge>) : null}
       </Card>
     </Link>
   )

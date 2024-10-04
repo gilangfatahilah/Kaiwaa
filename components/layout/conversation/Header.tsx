@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { cn } from '@/lib/utils';
+import { checkNullWords, cn } from '@/lib/utils';
 import { CircleArrowLeft, Settings } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react'
@@ -33,7 +33,7 @@ const Header = ({ imageUrl, name, options }: Props) => {
         </Avatar>
 
         <h2 className='font-semibold'>
-          {name}
+          {checkNullWords(name)}
         </h2>
       </div>
 

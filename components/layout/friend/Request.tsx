@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card';
 import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel'
 import { useMutationState } from '@/hooks/useMutationState';
+import { checkNullWords } from '@/lib/utils';
 import { ConvexError } from 'convex/values';
 import { Check, User, X } from 'lucide-react';
 import React from 'react'
@@ -17,10 +18,6 @@ type Props = {
   email: string;
 }
 
-function checkNullWords(input: string): string {
-  return input.replace(/\bnull\b/g, '').trim().replace(/\s+/g, ' ');
-}
-
 const Request = ({ id, imageUrl, username, email }: Props) => {
   const formattedUsername = checkNullWords(username);
   const { mutate: acceptRequest, pending: acceptPending } = useMutationState(api.request.accept)
@@ -31,7 +28,7 @@ const Request = ({ id, imageUrl, username, email }: Props) => {
       .then(() => {
         toast.success('Friend request accepted')
       })
-      .catch((error) => {
+      .catch((error: any) => {
         toast.error(error instanceof ConvexError
           ? error.data
           : "Unexpected error occurred")

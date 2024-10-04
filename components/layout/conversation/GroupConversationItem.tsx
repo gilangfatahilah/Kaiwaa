@@ -10,12 +10,13 @@ type Props = {
   name: string;
   lastMessageSender?: string;
   lastMessageContent?: string;
-  // unseenCount: number;
+  unseenCount: number;
 };
 
 const GroupConversationItem = ({
   id,
   name,
+  unseenCount,
   lastMessageSender,
   lastMessageContent,
 }: Props) => {
@@ -48,7 +49,7 @@ const GroupConversationItem = ({
           </div>
         </div>
 
-        {/* {unseenCount ? <Badge>{unseenCount}</Badge> : null} */}
+        {unseenCount ? (<Badge>{unseenCount}</Badge>) : null}
       </Card>
     </Link>
   );

@@ -94,7 +94,14 @@ const ConversationPage = ({ params: { conversationId } }: Props) => {
               }
             />
 
-            <ConversationBody />
+            <ConversationBody members={
+              conversation.isGroup
+                ? conversation.otherMembers
+                  ? conversation.otherMembers : []
+                : conversation.otherMember
+                  ? [conversation.otherMember]
+                  : []
+            } />
             <ChatInput />
           </ConversationContainer>
         )

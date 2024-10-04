@@ -27,3 +27,7 @@ export function se<
   component.displayName = Tag[0].toUpperCase() + Tag.slice(1);
   return component;
 }
+
+export function checkNullWords(input: string): string {
+  return input.replace(/\bnull\b/g, '').trim().replace(/\s+/g, ' ');
+}
