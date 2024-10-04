@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Kaiwaa",
-  description: "My app description",
+  description: "Kaiwaa is a realtime chat app built with Next js",
 };
 
 export default function RootLayout({
