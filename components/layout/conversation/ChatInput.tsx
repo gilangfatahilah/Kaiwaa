@@ -14,6 +14,9 @@ import { z } from 'zod'
 import TextareaAutoSize from 'react-textarea-autosize'
 import { Button } from '@/components/ui/button'
 import { SendHorizontal } from 'lucide-react'
+import MessageActionPopover from './MessageActionPopover'
+import { useTheme } from 'next-themes'
+import EmojiPicker, { Theme } from 'emoji-picker-react'
 
 const chatMessageSchema = z.object({
   content: z.string().min(1, {
@@ -23,7 +26,12 @@ const chatMessageSchema = z.object({
 
 const ChatInput = () => {
   const textareaRef = React.useRef<HTMLTextAreaElement | null>(null);
+  const emojiPickerRef = React.useRef<any>(null);
 
+  const [emojiPickerOpen, setEmojiPickerOpen] = React.useState<boolean>(false);
+  const [cursorPosition, setCursorPosition] = React.useState<number>(0);
+
+  const { theme } = useTheme();
   const { conversationId } = useConversation();
   const { mutate: createMessage, pending } = useMutationState(api.message.create)
 
@@ -34,6 +42,8 @@ const ChatInput = () => {
     }
   });
 
+  const content = form.watch('content', '')
+
   const handleSubmit = async (values: z.infer<typeof chatMessageSchema>) => {
     createMessage({
       conversationId,
@@ -41,6 +51,7 @@ const ChatInput = () => {
       content: [values.content]
     }).then(() => {
       form.reset();
+      textareaRef.current?.focus();
     }).catch((error) => {
       toast.error(error instanceof ConvexError
         ? error.data
@@ -53,16 +64,57 @@ const ChatInput = () => {
 
     if (selectionStart !== null) {
       form.setValue('content', value);
+      setCursorPosition(selectionStart);
     }
   }
 
+  const insertEmoji = (emoji: string) => {
+    const newText = [
+      content.substring(0, cursorPosition),
+      emoji,
+      content.substring(cursorPosition)
+    ].join('');
+
+    form.setValue('content', newText);
+    setCursorPosition(cursorPosition + emoji.length);
+  }
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (emojiPickerRef.current
+        && !emojiPickerRef.current
+          .contains(event.target)) {
+        setEmojiPickerOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [])
+
   return (
     <Card className='w-full p-2 rounded-lg relative'>
-      <div className="flex gap-2 items-end w-full">
+      <div ref={emojiPickerRef} className='absolute bottom-16'>
+        <EmojiPicker
+          open={emojiPickerOpen}
+          theme={theme as Theme}
+          onEmojiClick={(emojiDetails) => {
+            insertEmoji(emojiDetails.emoji);
+            setEmojiPickerOpen(false)
+          }}
+          lazyLoadEmojis
+        />
+      </div>
+      <div className="flex gap-2 items-center w-full">
+        <MessageActionPopover setEmojiPickerOpen={setEmojiPickerOpen} />
+
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
-            className='flex gap-2 items-end w-full'
+            className='flex gap-2 items-center w-full'
           >
             <FormField
               control={form.control}
