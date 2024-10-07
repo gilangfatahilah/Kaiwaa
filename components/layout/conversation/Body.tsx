@@ -8,7 +8,7 @@ import React, { Dispatch, SetStateAction } from 'react'
 import Message from './Message';
 import { useMutationState } from '@/hooks/useMutationState';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import CallRoom from './CallRoom';
+import { CallRoom } from './CallRoom';
 
 type Props = {
   members: {

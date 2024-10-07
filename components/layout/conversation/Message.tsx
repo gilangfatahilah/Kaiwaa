@@ -71,7 +71,7 @@ const Message = ({
           {
             type === 'call'
               ? (
-                <Badge variant='secondary'>
+                <Badge variant={fromCurrentUser ? 'secondary' : 'default'}>
                   Joined call
                 </Badge>
               )
