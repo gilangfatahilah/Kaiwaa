@@ -4,20 +4,23 @@ import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel';
 import { useConversation } from '@/hooks/useConversation';
 import { useQuery } from 'convex/react';
-import React from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import Message from './Message';
 import { useMutationState } from '@/hooks/useMutationState';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import CallRoom from './CallRoom';
 
 type Props = {
   members: {
     lastSeenMessageId?: Id<'messages'>;
     username?: string;
     [key: string]: any;
-  }[]
+  }[];
+  callType: 'audio' | 'video' | null;
+  setCallType: Dispatch<SetStateAction<'audio' | 'video' | null>>
 }
 
-const ConversationBody = ({ members }: Props) => {
+const ConversationBody = ({ members, callType, setCallType }: Props) => {
   const { conversationId } = useConversation();
   const messages = useQuery(api.messages.get, {
     id: conversationId as Id<'conversations'>
@@ -89,8 +92,8 @@ const ConversationBody = ({ members }: Props) => {
 
   return (
     <div className='flex-1 w-full flex overflow-y-scroll flex-col-reverse gap-2 p-3 no-scrollbar'>
-      {
-        messages?.map(({
+      {!callType
+        ? messages?.map(({
           message, senderImage, senderName, isCurrentUser
         }, idx) => {
           const lastByUser = messages[idx - 1]?.message.senderId === messages[idx].message.senderId;
@@ -111,6 +114,11 @@ const ConversationBody = ({ members }: Props) => {
             seen={seenMessage}
           />;
         })
+        : <CallRoom
+          audio={callType === 'audio' || callType === 'video'}
+          video={callType === 'video'}
+          handleDisconnect={() => setCallType(null)}
+        />
       }
     </div>
   )

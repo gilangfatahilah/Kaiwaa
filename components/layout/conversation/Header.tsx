@@ -3,9 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { checkNullWords, cn } from '@/lib/utils';
-import { CircleArrowLeft, Settings } from 'lucide-react';
+import { CircleArrowLeft, Phone, Settings, Video } from 'lucide-react';
 import Link from 'next/link';
-import React from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 
 type Props = {
   imageUrl?: string;
@@ -14,10 +14,11 @@ type Props = {
     label: string
     destructive: boolean
     onClick: () => void
-  }[]
+  }[];
+  setCallType: Dispatch<SetStateAction<'audio' | 'video' | null>>
 }
 
-const Header = ({ imageUrl, name, options }: Props) => {
+const Header = ({ imageUrl, name, options, setCallType }: Props) => {
   return (
     <Card className='w-full flex rounded-lg items-center p-2 justify-between'>
       <div className='flex items-center gap-2 '>
@@ -38,6 +39,13 @@ const Header = ({ imageUrl, name, options }: Props) => {
       </div>
 
       <div className='flex gap-2'>
+        <Button size={'icon'} variant={'secondary'} onClick={() => setCallType('audio')}>
+          <Phone />
+        </Button>
+        <Button size={'icon'} variant={'secondary'} onClick={() => setCallType('video')}>
+          <Video />
+        </Button>
+
         {
           options ? (
             <DropdownMenu>

@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import React from 'react'
 import ImagePreview from './ImagePreview';
 import FilePreview from './FilePreview';
+import { Badge } from '@/components/ui/badge';
 
 type Props = {
   fromCurrentUser: boolean;
@@ -64,6 +65,15 @@ const Message = ({
             type === 'file'
               ? (
                 <FilePreview url={content[0]} />
+              )
+              : null
+          }
+          {
+            type === 'call'
+              ? (
+                <Badge variant='secondary'>
+                  Joined call
+                </Badge>
               )
               : null
           }
