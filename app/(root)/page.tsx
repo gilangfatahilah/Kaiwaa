@@ -1,5 +1,5 @@
 const Home = () => {
-  return null;
+  return <p>this is empty page</p>;
 }
 
 export default Home
